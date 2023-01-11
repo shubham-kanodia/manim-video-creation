@@ -64,7 +64,7 @@ class OptimisedPowerCalculation(Scene):
 
         solution_part_2_top_text = Tex(
             """
-            Let's take an example of $2^15$ to break this down \n\n
+            Let's take an example of $2^{15}$ to break this down \n\n
             """, font_size=50
         )
         solution_part_2_bottom_text = Text(
@@ -86,12 +86,12 @@ class OptimisedPowerCalculation(Scene):
         # End of part 3
 
         solution_list = VGroup(
-            Tex(r"$2^15 = f(2, 15)$"),
-            Tex(r"$\therefore 2^15 = 2 * f(2^2, \dfrac{(15 - 1)}{2} = 2 * f(4, 7)$"),
-            Tex(r"$\therefore 2^15 = 2 * [4 * f(4^2, \dfrac{7 - 1}{2})] = 2 * 4 * f(16, 3)$"),
-            Tex(r"$\therefore 2^15 = 2 * 4 * [16 * f(16^2, \dfrac{3 - 1}{2})] = 2 * 4 * 16 * f(256, 1)$"),
-            Tex(r"$\therefore 2^15 = 2 * 4 * 16 * 256$"),
-            Tex(r"$\therefore 2^15 = 32786$")
+            Tex(r"$2^{15} = f(2, 15)$"),
+            Tex(r"$\therefore 2^{15} = 2 * f(2^2, \dfrac{(15 - 1)}{2} = 2 * f(4, 7)$"),
+            Tex(r"$\therefore 2^{15} = 2 * [4 * f(4^2, \dfrac{7 - 1}{2})] = 2 * 4 * f(16, 3)$"),
+            Tex(r"$\therefore 2^{15} = 2 * 4 * [16 * f(16^2, \dfrac{3 - 1}{2})] = 2 * 4 * 16 * f(256, 1)$"),
+            Tex(r"$\therefore 2^{15} = 2 * 4 * 16 * 256$"),
+            Tex(r"$\therefore 2^{15} = 32786$")
         )
         solution_list.arrange(DOWN, buff=MED_SMALL_BUFF, aligned_edge=LEFT)
 
