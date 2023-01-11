@@ -11,7 +11,7 @@ class OptimisedPowerCalculation(Scene):
         description = Text(
             """
             In this video we will see how we can use squares method \n
-            to do fast exponentiation.
+            to do fast exponentiation
             """,
             font="Arial", font_size=32,
             slant=ITALIC,
@@ -88,8 +88,8 @@ class OptimisedPowerCalculation(Scene):
         solution_list = VGroup(
             Tex(r"$2^15 = f(2, 15)$"),
             Tex(r"$\therefore 2^15 = 2 * f(2^2, \dfrac{(15 - 1)}{2} = 2 * f(4, 7)$"),
-            Tex(r"$\therefore 2^15 = 2 * [4 * f(4^2, \dfrac{7 - 1}{2}] = 2 * 4 * f(16, 3)$"),
-            Tex(r"$\therefore 2^15 = 2 * 4 * [16 * f(16^2, \dfrac{3 - 1}{2}] = 2 * 4 * 16 * f(256, 1)$"),
+            Tex(r"$\therefore 2^15 = 2 * [4 * f(4^2, \dfrac{7 - 1}{2})] = 2 * 4 * f(16, 3)$"),
+            Tex(r"$\therefore 2^15 = 2 * 4 * [16 * f(16^2, \dfrac{3 - 1}{2})] = 2 * 4 * 16 * f(256, 1)$"),
             Tex(r"$\therefore 2^15 = 2 * 4 * 16 * 256$"),
             Tex(r"$\therefore 2^15 = 32786$")
         )
