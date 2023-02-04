@@ -3,41 +3,46 @@ from manim import *
 
 class ProverVerifierHashCheck(Scene):
     DODGER_BLUE = "#1E90FF"
+    CREME = "#FF9966"
+
+    PARAMETER_COLOR_1 = "#217C7E"
+    PARAMETER_COLOR_2 = "#3399FF"
+    PARAMETER_COLOR_3 = "#9A3334"
 
     def exit_elements(self, elements):
         self.play(*[FadeOut(element) for element in elements])
 
     def scene_1(self):
         chat_bubble = ImageMobject("assets/dialogue/1.png")
-        chat_bubble.move_to([-3, 2.2, 0])
+        chat_bubble.move_to([-2.3, 2.2, 0])
         self.play(FadeIn(chat_bubble))
         self.wait(2)
 
         self.play(FadeOut(chat_bubble))
 
         chat_bubble = ImageMobject("assets/dialogue/2.png")
-        chat_bubble.move_to([2.5, 2.2, 0])
+        chat_bubble.move_to([2, 2.2, 0])
         self.play(FadeIn(chat_bubble))
         self.wait(2)
 
         self.play(FadeOut(chat_bubble))
 
         chat_bubble = ImageMobject("assets/dialogue/3.png")
-        chat_bubble.move_to([-3, 2.2, 0])
+        chat_bubble.move_to([-2.3, 2.2, 0])
         self.play(FadeIn(chat_bubble))
         self.wait(2)
 
         self.play(FadeOut(chat_bubble))
 
         chat_bubble = ImageMobject("assets/dialogue/4.png")
-        chat_bubble.move_to([2.5, 2.2, 0])
+        chat_bubble.move_to([2, 2.2, 0])
         self.play(FadeIn(chat_bubble))
         self.wait(2)
 
         self.play(FadeOut(chat_bubble))
 
         chat_bubble = ImageMobject("assets/dialogue/5.png")
-        chat_bubble.move_to([-3, 2.2, 0])
+        chat_bubble.move_to([-2.3, 2.2, 0])
         self.play(FadeIn(chat_bubble))
         self.wait(2)
 
@@ -67,18 +72,18 @@ class ProverVerifierHashCheck(Scene):
 
     def scene_2(self):
         trusted_setup_text = self.trusted_setup_text()
-        self.play(FadeIn(trusted_setup_text))
-
-        lambda_text = Text('lambda', font_size=30, color=BLACK, weight=BOLD, slant=ITALIC)
+        step_1_text = Text('STEP 1', font_size=30, color=self.CREME, weight=BOLD, font="sans-serif")
+        lambda_text = Text('lambda', font_size=30, color=self.PARAMETER_COLOR_1, weight=BOLD, slant=ITALIC)
         lambda_desc_text = Text('(A "very" secret value to be discarded later)', font_size=30, color=BLACK,
                                 text2color={"discarded": RED})
 
-        lambda_group = VGroup(lambda_text, lambda_desc_text).arrange(DOWN, buff=SMALL_BUFF)
+        lambda_group = VGroup(step_1_text, lambda_text, lambda_desc_text).arrange(DOWN, buff=SMALL_BUFF)
 
         center = trusted_setup_text.get_center()[1] + trusted_setup_text.height / 2
-        lambda_arrow = Arrow(start=[0, center + 2, 0], end=[0, center, 0], color=BLACK)
-        lambda_group = lambda_group.move_to(lambda_arrow, UP).shift(1 * UP)
-        self.play(FadeIn(lambda_group), FadeIn(lambda_arrow))
+        lambda_arrow = Arrow(start=[0, center + 1.5, 0], end=[0, center, 0], color=BLACK)
+        lambda_group = lambda_group.move_to(lambda_arrow, UP).shift(1.4 * UP)
+        step_1_text.shift(0.2 * UP)
+        self.play(FadeIn(trusted_setup_text), FadeIn(lambda_group), FadeIn(lambda_arrow))
 
         bottom_arrows_begin = [trusted_setup_text.get_center()[0],
                                trusted_setup_text.get_center()[1] - 0.65 * trusted_setup_text.height, 0]
@@ -110,13 +115,13 @@ class ProverVerifierHashCheck(Scene):
         line_begin = [bottom_arrow_1_end[0],
                       bottom_arrow_1_end[1] - 0.5,
                       0]
-        line_end = [-5.2, 1.3, 0]
+        line_end = [-4.7, 1.3, 0]
         l1 = Line(line_begin, line_end, color=RED)
 
         line_begin = [bottom_arrow_2_end[0],
                       bottom_arrow_2_end[1] - 0.5,
                       0]
-        line_end = [5.2, 1.8, 0]
+        line_end = [4.7, 1.3, 0]
         l2 = Line(line_begin, line_end, color=RED)
 
         self.play(
@@ -128,18 +133,25 @@ class ProverVerifierHashCheck(Scene):
     def scene_3(self):
         proving_algo_text = self.proving_algo_text()
 
-        self.play(FadeIn(proving_algo_text))
-
-        proving_key_text = Text('Pk, Secret Value (w), Hashed Value (x)', font_size=30,
-                                t2w={"Pk": BOLD,
+        step_2_text = Text('STEP 2', font_size=30, color=self.CREME, weight=BOLD, font="sans-serif")
+        proving_key_text = Text('Prover Key (Pk), Secret Value (w), Hashed Value (x)', font_size=25,
+                                t2w={"Prover Key (Pk)": BOLD,
                                      "Secret Value (w)": BOLD,
                                      "Hashed Value (x)": BOLD},
-                                color=BLACK, slant=ITALIC)
+                                t2c={
+                                    "Prover Key (Pk)": self.PARAMETER_COLOR_1,
+                                    "Secret Value (w)": self.PARAMETER_COLOR_2,
+                                    "Hashed Value (x)": self.PARAMETER_COLOR_3
+                                },
+                                font="sans-serif",
+                                color=BLACK)
 
         center = proving_algo_text.get_center()[1] + proving_algo_text.height / 2
-        lambda_arrow = Arrow(start=[0, center + 2, 0], end=[0, center, 0], color=BLACK)
-        proving_key_text = proving_key_text.move_to(lambda_arrow, UP).shift(1 * UP)
-        self.play(FadeIn(proving_key_text), FadeIn(lambda_arrow))
+        lambda_arrow = Arrow(start=[0, center + 1.5, 0], end=[0, center, 0], color=BLACK)
+        proving_key_text = proving_key_text.move_to(lambda_arrow, UP).shift(0.8 * UP)
+        step_2_text.move_to(proving_key_text, UP).shift(0.7 * UP)
+
+        self.play(FadeIn(proving_algo_text), FadeIn(step_2_text), FadeIn(proving_key_text), FadeIn(lambda_arrow))
 
         bottom_arrow_begin = [proving_algo_text.get_center()[0],
                               proving_algo_text.get_center()[1] - 0.65 * proving_algo_text.height, 0]
@@ -151,7 +163,7 @@ class ProverVerifierHashCheck(Scene):
 
         self.play(Create(bottom_arrow), Write(proof_text))
         self.wait(2)
-        self.play(FadeOut(proving_algo_text), FadeOut(lambda_arrow), FadeOut(proving_key_text),
+        self.play(FadeOut(step_2_text), FadeOut(proving_algo_text), FadeOut(lambda_arrow), FadeOut(proving_key_text),
                   FadeOut(bottom_arrow), FadeOut(proof_text))
 
         proving_arrow = Arrow(start=[-3, -1, 0], end=[3, -1, 0], color=BLACK)
@@ -176,18 +188,28 @@ class ProverVerifierHashCheck(Scene):
     def scene_4(self):
         verification_algo_text = self.verification_algo_text()
 
-        self.play(FadeIn(verification_algo_text))
-
-        verification_input_text = Text('Vk, Hashed Value (x), Proof', font_size=30,
-                                       t2w={"Vk": BOLD,
+        step_3_text = Text('STEP 3', font_size=30, color=self.CREME, weight=BOLD, font="sans-serif")
+        verification_input_text = Text('Verifier Key (Vk), Hashed Value (x), Proof', font_size=25,
+                                       t2w={"Verifier Key (Vk)": BOLD,
                                             "Proof": BOLD,
                                             "Hashed Value (x)": BOLD},
-                                       color=BLACK, slant=ITALIC)
+                                       t2c={
+                                           "Verifier Key (Vk)": self.PARAMETER_COLOR_1,
+                                           "Proof": self.PARAMETER_COLOR_2,
+                                           "Hashed Value (x)": self.PARAMETER_COLOR_3
+                                       },
+                                       font="sans-serif",
+                                       color=BLACK)
 
         center = verification_algo_text.get_center()[1] + verification_algo_text.height / 2
-        lambda_arrow = Arrow(start=[0, center + 2, 0], end=[0, center, 0], color=BLACK)
-        verification_input_text = verification_input_text.move_to(lambda_arrow, UP).shift(1 * UP)
-        self.play(FadeIn(verification_input_text), FadeIn(lambda_arrow))
+        lambda_arrow = Arrow(start=[0, center + 1.5, 0], end=[0, center, 0], color=BLACK)
+        verification_input_text = verification_input_text.move_to(lambda_arrow, UP).shift(0.8 * UP)
+        step_3_text.move_to(verification_input_text, UP).shift(0.7 * UP)
+
+        self.play(
+            FadeIn(verification_algo_text), FadeIn(step_3_text), FadeIn(verification_input_text),
+            FadeIn(lambda_arrow)
+        )
 
         bottom_arrow_begin = [verification_algo_text.get_center()[0],
                               verification_algo_text.get_center()[1] - 0.65 * verification_algo_text.height, 0]
@@ -200,8 +222,8 @@ class ProverVerifierHashCheck(Scene):
         self.play(Create(bottom_arrow), Write(verification_op_text))
         self.wait(2)
 
-        self.play(FadeOut(verification_input_text), FadeOut(lambda_arrow), FadeOut(verification_input_text),
-                  FadeOut(bottom_arrow), FadeOut(verification_op_text),
+        self.play(FadeOut(step_3_text), FadeOut(verification_input_text), FadeOut(lambda_arrow),
+                  FadeOut(verification_input_text), FadeOut(bottom_arrow), FadeOut(verification_op_text),
                   FadeOut(verification_algo_text))
 
     def intro(self):
@@ -235,47 +257,29 @@ class ProverVerifierHashCheck(Scene):
         play_args = {"run_time": 4}
         self.camera.background_color = WHITE
 
-        prover_character = ImageMobject("assets/prover.png")
-        prover_character.height = 4
-        prover_character.width = 2
-        peggy_the_prover = Text("Peggy the Prover", font_size=26, color=DODGER_BLUE)
+        prover_character = ImageMobject("assets/peggy.png")
+        prover_character.height = 5
+        prover_character.width = 3
 
-        verifier_character = ImageMobject("assets/verifier-new.png")
-        verifier_character.height = 4.2
-        verifier_character.width = 2.5
-        victor_the_verifier = Text("Victor the Verifier", font_size=26, color=DODGER_BLUE)
+        verifier_character = ImageMobject("assets/victor.png")
+        verifier_character.height = 5
+        verifier_character.width = 3
 
-        prover_character.move_to([-5, -1, 0])
-        peggy_the_prover.next_to(prover_character, DOWN)
+        prover_character.move_to([-5, -1.3, 0])
 
         self.intro()
 
-        self.add(prover_character, peggy_the_prover)
+        self.add(prover_character)
 
-        verifier_character.move_to([5, -0.8, 0])
-        victor_the_verifier.next_to(verifier_character, DOWN)
+        verifier_character.move_to([5, -1.3, 0])
 
-        self.add(verifier_character, victor_the_verifier)
+        self.add(verifier_character)
 
         self.scene_1()
 
         self.scene_2()
 
-        chat_bubble = ImageMobject("assets/dialogue/6.png")
-        chat_bubble.move_to([-2.1, 2.2, 0])
-        self.play(FadeIn(chat_bubble))
-        self.wait(2)
-
-        self.play(FadeOut(chat_bubble))
-
         self.scene_3()
-
-        chat_bubble = ImageMobject("assets/dialogue/7.png")
-        chat_bubble.move_to([-2.1, 2.2, 0])
-        self.play(FadeIn(chat_bubble))
-        self.wait(2)
-
-        self.play(FadeOut(chat_bubble))
 
         self.scene_4()
 
