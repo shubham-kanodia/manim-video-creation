@@ -8,12 +8,9 @@ class ProverVerifierHashCheck(Scene):
     DODGER_BLUE = "#1E90FF"
     CREME = "#FF9966"
 
-    PARAMETER_COLOR_1 = "#217C7E"
-    PARAMETER_COLOR_2 = "#3399FF"
-    PARAMETER_COLOR_3 = "#9A3334"
-
     BACKGROUND_COLOR = "#212121"
     BOX_BACKGROUND = "#303030"
+    BASE_FONT = "Roboto"
 
     def exit_elements(self, elements):
         self.play(*[FadeOut(element) for element in elements])
@@ -54,25 +51,27 @@ class ProverVerifierHashCheck(Scene):
 
         self.play(FadeOut(chat_bubble))
 
-        hashed_value_box = self.get_boxed_text("Hashed Value (x)", WHITE, WHITE, 18)
+        # hashed_value_box = self.get_boxed_text("Hashed Value (x)", WHITE, WHITE, 18)
         secret_value_box = self.get_boxed_text("Secret Value (w)", WHITE, WHITE, 18)
 
-        hashed_value_box.move_to([-5.5, 1.5, 0])
-        secret_value_box_x = hashed_value_box.get_center()[0] + hashed_value_box.width + 0.3
-        secret_value_box.move_to([secret_value_box_x, 1.5, 0])
+        # Secret value final position - [-5.5, 1.5, 0]
+        # hashed_value_box.move_to([-5.5, 1.5, 0])
+        secret_value_box_x = retained_objects.prover_character.get_center()[0]
+        secret_value_box.move_to([secret_value_box_x + 0.5, 1.5, 0])
 
-        hashed_value_box_verifier = self.get_boxed_text("Hashed Value (x)", WHITE, WHITE, 18)
-        hashed_value_box_verifier.move_to([4.5, 1.5, 0])
+        # hashed_value_box_verifier = self.get_boxed_text("Hashed Value (x)", WHITE, WHITE, 18)
+        # hashed_value_box_verifier.move_to([4.5, 1.5, 0])
 
-        self.play(Create(hashed_value_box), Create(secret_value_box), Create(hashed_value_box_verifier))
+        self.play(Create(secret_value_box))
+        self.wait(1)
 
-        retained_objects.hashed_value_box = hashed_value_box
+        # retained_objects.hashed_value_box = hashed_value_box
         retained_objects.secret_value_box = secret_value_box
-        retained_objects.hashed_value_box_verifier = hashed_value_box_verifier
+        # retained_objects.hashed_value_box_verifier = hashed_value_box_verifier
 
     def trusted_setup_text(self):
         result = VGroup()
-        with RegisterFont("Roboto") as fonts:
+        with RegisterFont(self.BASE_FONT) as fonts:
             text = Text("Trusted Setup", color=ORANGE, font_size=30, font=fonts[0])
         box = Rectangle(
             color=self.BACKGROUND_COLOR, height=text.height + 0.5, width=text.width + 0.5,
@@ -84,8 +83,20 @@ class ProverVerifierHashCheck(Scene):
 
     def proving_algo_text(self):
         result = VGroup()
-        with RegisterFont("Roboto") as fonts:
+        with RegisterFont(self.BASE_FONT) as fonts:
             text = Text("Proving Algorithm", color=ORANGE, font_size=30, font=fonts[0])
+        box = Rectangle(
+            color=self.BACKGROUND_COLOR, height=text.height + 0.5, width=text.width + 0.5,
+            stroke_color=ORANGE
+        )
+        text = text.move_to(box.get_center())
+        result.add(box, text)
+        return result
+
+    def hash_fn_text(self):
+        result = VGroup()
+        with RegisterFont(self.BASE_FONT) as fonts:
+            text = Text("Hash Function", color=ORANGE, font_size=18, font=fonts[0])
         box = Rectangle(
             color=self.BACKGROUND_COLOR, height=text.height + 0.5, width=text.width + 0.5,
             stroke_color=ORANGE
@@ -137,13 +148,14 @@ class ProverVerifierHashCheck(Scene):
         line_begin = [bottom_arrow_1_end[0],
                       bottom_arrow_1_end[1] - 0.5,
                       0]
-        line_end = [-4.4, 2.5, 0]
+        line_end = [-4.5, 2.5, 0]
         l1 = Line(line_begin, line_end, color=RED)
 
         line_begin = [bottom_arrow_2_end[0],
                       bottom_arrow_2_end[1] - 0.5,
                       0]
-        line_end = [4.5, 2.5, 0]
+        # line_end = [4.5, 2.5, 0]
+        line_end = [4.5, 1.5, 0]
         l2 = Line(line_begin, line_end, color=RED)
 
         self.play(
@@ -154,6 +166,102 @@ class ProverVerifierHashCheck(Scene):
 
         retained_objects.prover_key_text = prover_key_text
         retained_objects.verifier_key_text = verifier_key_text
+
+    def pre_scene_3(self, retained_objects):
+        secret_value_box_2 = self.get_boxed_text("Secret Value (w)", WHITE, WHITE, 18)
+
+        secret_value_box_2.move_to([
+            retained_objects.secret_value_box.get_center()[0],
+            retained_objects.secret_value_box.get_center()[1],
+            0])
+
+        self.add(secret_value_box_2)
+
+        line_begin = [secret_value_box_2.get_center()[0],
+                      secret_value_box_2.get_center()[1],
+                      0]
+        line_end = [0, 2, 0]
+
+        l1 = Line(line_begin, line_end, color=RED)
+
+        arrow = Arrow(
+            start=[0, 2 - (secret_value_box_2.height / 2.0), 0],
+            end=[0, 2 - (secret_value_box_2.height / 2.0) - 0.1 - 1.3, 0], color=WHITE)
+
+        hash_function_text = self.get_boxed_text("Hash Function", ORANGE, ORANGE, 18)
+        hash_function_text.move_to(
+            [
+                0,
+                0.6 - (secret_value_box_2.height / 2.0) - 0.2,
+                0
+            ]
+        )
+
+        second_arrow = Arrow(
+            start=[0, hash_function_text.get_center()[1] - (hash_function_text.height / 2.0), 0],
+            end=[0, hash_function_text.get_center()[1] - (hash_function_text.height / 2.0) - 1.4, 0], color=WHITE)
+
+        hashed_value_box = self.get_boxed_text("Hashed Value (x)", WHITE, WHITE, 18)
+        hashed_value_box.move_to(
+            [0,
+             hash_function_text.get_center()[1] - (hash_function_text.height / 2.0) - 1.4 - 0.2,
+             0]
+        )
+
+        self.play(MoveAlongPath(secret_value_box_2, l1))
+        self.play(FadeIn(arrow),
+                  FadeIn(hash_function_text),
+                  FadeIn(second_arrow),
+                  FadeIn(hashed_value_box)
+                  )
+
+        self.wait(2)
+
+        hashed_value_box_2 = self.get_boxed_text("Hashed Value (x)", WHITE, WHITE, 18)
+        hashed_value_box_2.move_to(
+            [hashed_value_box.get_center()[0],
+             hashed_value_box.get_center()[1],
+             0]
+        )
+
+        self.add(hashed_value_box_2)
+
+        line_begin = [hashed_value_box.get_center()[0],
+                      hashed_value_box.get_center()[1],
+                      0]
+        line_end = [4.5, 2.5, 0]
+
+        l1 = Line(line_begin, line_end, color=RED)
+
+        line_begin = [retained_objects.secret_value_box.get_center()[0],
+                      retained_objects.secret_value_box.get_center()[1],
+                      0]
+        line_end = [-5.5, 1.5, 0]
+
+        l3 = Line(line_begin, line_end, color=RED)
+
+        line_begin = [hashed_value_box_2.get_center()[0],
+                      hashed_value_box_2.get_center()[1],
+                      0]
+        line_end = [
+            -5.5 + (retained_objects.secret_value_box.width / 2.0) + (hashed_value_box_2.width / 2.0) + 0.2,
+            1.5,
+            0]
+
+        l2 = Line(line_begin, line_end, color=RED)
+        self.play(
+            MoveAlongPath(hashed_value_box, l1),
+            MoveAlongPath(retained_objects.secret_value_box, l3),
+            MoveAlongPath(hashed_value_box_2, l2),
+            FadeOut(secret_value_box_2),
+            FadeOut(arrow),
+            FadeOut(second_arrow),
+            FadeOut(hash_function_text)
+        )
+
+        retained_objects.hashed_value_box = hashed_value_box_2
+        retained_objects.hashed_value_box_verifier = hashed_value_box
+        self.wait(2)
 
     def scene_3(self, retained_objects):
         proving_algo_text = self.proving_algo_text()
@@ -207,6 +315,27 @@ class ProverVerifierHashCheck(Scene):
         self.play(Create(bottom_arrow), Create(proof_text))
         self.wait(2)
 
+        proof_transfer_arrow = Arrow(
+            start=[-3, -1, 0], end=[3, -1, 0], color=WHITE
+        )
+
+        self.play(
+            FadeOut(step_2_text), FadeOut(proving_algo_text), FadeOut(lambda_arrow),
+            FadeOut(bottom_arrow), FadeOut(retained_objects.hashed_value_box),
+            FadeOut(retained_objects.secret_value_box),
+            FadeOut(retained_objects.prover_key_text)
+        )
+        self.play(FadeIn(proof_transfer_arrow))
+
+        line_begin = [proof_text.get_center()[0],
+                      proof_text.get_center()[1],
+                      0]
+        line_end = [0, -0.2, 0]
+        l1 = Line(line_begin, line_end, color=RED)
+
+        self.play(MoveAlongPath(proof_text, l1))
+        self.wait(1)
+
         line_begin = [retained_objects.verifier_key_text.get_center()[0],
                       retained_objects.verifier_key_text.get_center()[1],
                       0]
@@ -226,22 +355,18 @@ class ProverVerifierHashCheck(Scene):
         l2 = Line(line_begin, line_end, color=RED)
 
         self.play(
+            FadeOut(proof_transfer_arrow),
             MoveAlongPath(retained_objects.verifier_key_text, l1),
-            MoveAlongPath(proof_text, l2),
-            FadeOut(step_2_text), FadeOut(proving_algo_text), FadeOut(lambda_arrow),
-            FadeOut(bottom_arrow), FadeOut(retained_objects.hashed_value_box),
-            FadeOut(retained_objects.secret_value_box),
-            FadeOut(retained_objects.prover_key_text)
+            MoveAlongPath(proof_text, l2)
         )
 
         retained_objects.proof_text = proof_text
-
         self.wait(2)
 
     def verification_algo_text(self):
         result = VGroup()
 
-        with RegisterFont("Roboto") as fonts:
+        with RegisterFont(self.BASE_FONT) as fonts:
             text = Text("Verification Algorithm", color=ORANGE, font_size=30, font=fonts[0])
 
         box = Rectangle(
@@ -255,7 +380,7 @@ class ProverVerifierHashCheck(Scene):
     def get_boxed_text(self, text_content, text_color, box_colour, font_size):
         result = VGroup()
 
-        with RegisterFont("Roboto") as fonts:
+        with RegisterFont(self.BASE_FONT) as fonts:
             text = Text(text_content, color=text_color, font_size=font_size, font=fonts[0])
 
         box = Rectangle(
@@ -303,7 +428,7 @@ class ProverVerifierHashCheck(Scene):
         step_3_text = Text('STEP 3', font_size=30, color=self.CREME, weight=BOLD, font="sans-serif")
         step_3_text.move_to([
             0,
-            retained_objects.proof_text.get_center()[1] + 0.5,
+            retained_objects.hashed_value_box_verifier.get_center()[1] + 0.5,
             0
         ])
 
@@ -371,9 +496,9 @@ class ProverVerifierHashCheck(Scene):
 
         prover_character = ImageMobject("assets/revised/Peggy.png")
         prover_character.height = 4
-        prover_character.width = 12.0/5
+        prover_character.width = 12.0 / 5
 
-        with RegisterFont("Roboto") as fonts:
+        with RegisterFont(self.BASE_FONT) as fonts:
             peggy_text = Text("Peggy", font_size=20, color=WHITE, font=fonts[0], weight=BOLD)
             prover_text = Text("(Prover)", font_size=20, color=WHITE, font=fonts[0])
 
@@ -382,9 +507,9 @@ class ProverVerifierHashCheck(Scene):
 
         verifier_character = ImageMobject("assets/revised/Victor.png")
         verifier_character.height = 4
-        verifier_character.width = 12.0/5
+        verifier_character.width = 12.0 / 5
 
-        with RegisterFont("Roboto") as fonts:
+        with RegisterFont(self.BASE_FONT) as fonts:
             victor_text = Text("Victor", font_size=20, color=WHITE, font=fonts[0], weight=BOLD)
             verifier_text = Text("(Verifier)", font_size=20, color=WHITE, font=fonts[0])
 
@@ -394,6 +519,8 @@ class ProverVerifierHashCheck(Scene):
         prover_character.move_to([-5, -0.8, 0])
 
         retained_objects = SimpleNamespace()
+        retained_objects.prover_character = prover_character
+        retained_objects.verifier_character = verifier_character
 
         self.intro()
 
@@ -409,6 +536,7 @@ class ProverVerifierHashCheck(Scene):
 
         self.scene_2(retained_objects)
 
+        self.pre_scene_3(retained_objects)
         self.scene_3(retained_objects)
 
         self.scene_4(retained_objects)
