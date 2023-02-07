@@ -1,4 +1,6 @@
 from manim import *
+from manim_fonts import *
+
 from types import SimpleNamespace
 
 
@@ -10,53 +12,56 @@ class ProverVerifierHashCheck(Scene):
     PARAMETER_COLOR_2 = "#3399FF"
     PARAMETER_COLOR_3 = "#9A3334"
 
+    BACKGROUND_COLOR = "#212121"
+    BOX_BACKGROUND = "#303030"
+
     def exit_elements(self, elements):
         self.play(*[FadeOut(element) for element in elements])
 
     def scene_1(self, retained_objects):
-        chat_bubble = ImageMobject("assets/dialogue/1.png")
-        chat_bubble.move_to([-2.3, 2.2, 0])
+        chat_bubble = ImageMobject("assets/revised/dialogue/1.png")
+        chat_bubble.move_to([-2, 2, 0])
         self.play(FadeIn(chat_bubble))
         self.wait(2)
 
         self.play(FadeOut(chat_bubble))
 
-        chat_bubble = ImageMobject("assets/dialogue/2.png")
-        chat_bubble.move_to([2, 2.2, 0])
+        chat_bubble = ImageMobject("assets/revised/dialogue/2.png")
+        chat_bubble.move_to([2, 2, 0])
         self.play(FadeIn(chat_bubble))
         self.wait(2)
 
         self.play(FadeOut(chat_bubble))
 
-        chat_bubble = ImageMobject("assets/dialogue/3.png")
-        chat_bubble.move_to([-2.3, 2.2, 0])
+        chat_bubble = ImageMobject("assets/revised/dialogue/3.png")
+        chat_bubble.move_to([-2, 2, 0])
         self.play(FadeIn(chat_bubble))
         self.wait(2)
 
         self.play(FadeOut(chat_bubble))
 
-        chat_bubble = ImageMobject("assets/dialogue/4.png")
-        chat_bubble.move_to([2, 2.2, 0])
+        chat_bubble = ImageMobject("assets/revised/dialogue/4.png")
+        chat_bubble.move_to([2, 2, 0])
         self.play(FadeIn(chat_bubble))
         self.wait(2)
 
         self.play(FadeOut(chat_bubble))
 
-        chat_bubble = ImageMobject("assets/dialogue/5.png")
-        chat_bubble.move_to([-2.3, 2.2, 0])
+        chat_bubble = ImageMobject("assets/revised/dialogue/5.png")
+        chat_bubble.move_to([-2, 2, 0])
         self.play(FadeIn(chat_bubble))
         self.wait(2)
 
         self.play(FadeOut(chat_bubble))
 
-        hashed_value_box = self.get_boxed_text("Hashed Value (x)", BLACK, BLACK, 18)
-        secret_value_box = self.get_boxed_text("Secret Value (w)", BLACK, BLACK, 18)
+        hashed_value_box = self.get_boxed_text("Hashed Value (x)", WHITE, WHITE, 18)
+        secret_value_box = self.get_boxed_text("Secret Value (w)", WHITE, WHITE, 18)
 
         hashed_value_box.move_to([-5.5, 1.5, 0])
         secret_value_box_x = hashed_value_box.get_center()[0] + hashed_value_box.width + 0.3
         secret_value_box.move_to([secret_value_box_x, 1.5, 0])
 
-        hashed_value_box_verifier = self.get_boxed_text("Hashed Value (x)", BLACK, BLACK, 18)
+        hashed_value_box_verifier = self.get_boxed_text("Hashed Value (x)", WHITE, WHITE, 18)
         hashed_value_box_verifier.move_to([4.5, 1.5, 0])
 
         self.play(Create(hashed_value_box), Create(secret_value_box), Create(hashed_value_box_verifier))
@@ -67,10 +72,11 @@ class ProverVerifierHashCheck(Scene):
 
     def trusted_setup_text(self):
         result = VGroup()
-        text = Text("Trusted Setup", color=self.DODGER_BLUE, font_size=30)
+        with RegisterFont("Roboto") as fonts:
+            text = Text("Trusted Setup", color=ORANGE, font_size=30, font=fonts[0])
         box = Rectangle(
-            height=text.height + 0.5, width=text.width + 0.5,
-            fill_opacity=0.5, stroke_color=self.DODGER_BLUE
+            color=self.BACKGROUND_COLOR, height=text.height + 0.5, width=text.width + 0.5,
+            stroke_color=ORANGE
         )
         text = text.move_to(box.get_center())
         result.add(box, text)
@@ -78,10 +84,11 @@ class ProverVerifierHashCheck(Scene):
 
     def proving_algo_text(self):
         result = VGroup()
-        text = Text("Proving Algorithm", color=self.DODGER_BLUE, font_size=30)
+        with RegisterFont("Roboto") as fonts:
+            text = Text("Proving Algorithm", color=ORANGE, font_size=30, font=fonts[0])
         box = Rectangle(
-            height=text.height + 0.5, width=text.width + 0.5,
-            fill_opacity=0.5, stroke_color=self.DODGER_BLUE
+            color=self.BACKGROUND_COLOR, height=text.height + 0.5, width=text.width + 0.5,
+            stroke_color=ORANGE
         )
         text = text.move_to(box.get_center())
         result.add(box, text)
@@ -90,15 +97,13 @@ class ProverVerifierHashCheck(Scene):
     def scene_2(self, retained_objects):
         trusted_setup_text = self.trusted_setup_text()
         step_1_text = Text('STEP 1', font_size=30, color=self.CREME, weight=BOLD, font="sans-serif")
-        lambda_text = self.get_boxed_text('lambda (A "very" secret value to be discarded later)', BLACK, BLACK, 18)
-        # lambda_desc_text = Text(, font_size=18, color=BLACK,
-        #                         text2color={"discarded": RED})
+        lambda_text = self.get_boxed_text('lambda (A "very" secret value to be discarded later)', WHITE, WHITE, 18)
 
         lambda_group = VGroup(step_1_text, lambda_text).arrange(DOWN, buff=SMALL_BUFF)
 
         center = trusted_setup_text.get_center()[1] + trusted_setup_text.height / 2
-        lambda_arrow = Arrow(start=[0, center + 1.5, 0], end=[0, center, 0], color=BLACK)
-        lambda_group = lambda_group.move_to(lambda_arrow, UP).shift(1.4 * UP)
+        lambda_arrow = Arrow(start=[0, center + 1.5, 0], end=[0, center, 0], color=WHITE)
+        lambda_group = lambda_group.move_to(lambda_arrow, UP).shift(1.6 * UP)
         step_1_text.shift(0.2 * UP)
         self.play(FadeIn(trusted_setup_text), FadeIn(lambda_group), FadeIn(lambda_arrow))
 
@@ -107,19 +112,19 @@ class ProverVerifierHashCheck(Scene):
         bottom_arrow_1_end = [bottom_arrows_begin[0] - 2, bottom_arrows_begin[1] - 2, 0]
         bottom_arrow_2_end = [bottom_arrows_begin[0] + 2, bottom_arrows_begin[1] - 2, 0]
 
-        setup_bottom_arrow_1 = Arrow(start=bottom_arrows_begin, end=bottom_arrow_1_end, color=BLACK)
-        setup_bottom_arrow_2 = Arrow(start=bottom_arrows_begin, end=bottom_arrow_2_end, color=BLACK)
+        setup_bottom_arrow_1 = Arrow(start=bottom_arrows_begin, end=bottom_arrow_1_end, color=WHITE)
+        setup_bottom_arrow_2 = Arrow(start=bottom_arrows_begin, end=bottom_arrow_2_end, color=WHITE)
 
         self.play(Create(setup_bottom_arrow_1), Create(setup_bottom_arrow_2))
 
-        prover_key_text = self.get_boxed_text("Prover Key (Pk)", BLACK, BLACK, 18)
+        prover_key_text = self.get_boxed_text("Prover Key (Pk)", WHITE, WHITE, 18)
         prover_key_text.move_to(
             [bottom_arrow_1_end[0],
              bottom_arrow_1_end[1] - 0.5,
              0]
         )
 
-        verifier_key_text = self.get_boxed_text("Verifier Key (Vk)", BLACK, BLACK, 18)
+        verifier_key_text = self.get_boxed_text("Verifier Key (Vk)", WHITE, WHITE, 18)
         verifier_key_text.move_to(
             [bottom_arrow_2_end[0],
              bottom_arrow_2_end[1] - 0.5,
@@ -187,16 +192,16 @@ class ProverVerifierHashCheck(Scene):
         )
 
         center = proving_algo_text.get_center()[1] + proving_algo_text.height / 2
-        lambda_arrow = Arrow(start=[0, center + 1.5, 0], end=[0, center, 0], color=BLACK)
+        lambda_arrow = Arrow(start=[0, center + 1.5, 0], end=[0, center, 0], color=WHITE)
         self.play(Create(proving_algo_text), Create(lambda_arrow))
 
         bottom_arrow_begin = [proving_algo_text.get_center()[0],
                               proving_algo_text.get_center()[1] - 0.5 * proving_algo_text.height, 0]
         bottom_arrow_1_end = [bottom_arrow_begin[0], bottom_arrow_begin[1] - 1.5, 0]
 
-        bottom_arrow = Arrow(start=bottom_arrow_begin, end=bottom_arrow_1_end, color=BLACK)
-        proof_text = self.get_boxed_text("Proof", BLACK, BLACK, 18)
-        # proof_text = Text("Proof", color=BLACK, weight=BOLD, font_size=30)
+        bottom_arrow = Arrow(start=bottom_arrow_begin, end=bottom_arrow_1_end, color=WHITE)
+        proof_text = self.get_boxed_text("Proof", WHITE, WHITE, 18)
+        # proof_text = Text("Proof", color=WHITE, weight=BOLD, font_size=30)
         proof_text.move_to(bottom_arrow, DOWN).shift(0.8 * DOWN)
 
         self.play(Create(bottom_arrow), Create(proof_text))
@@ -235,10 +240,13 @@ class ProverVerifierHashCheck(Scene):
 
     def verification_algo_text(self):
         result = VGroup()
-        text = Text("Verification Algorithm", color=self.DODGER_BLUE, font_size=30)
+
+        with RegisterFont("Roboto") as fonts:
+            text = Text("Verification Algorithm", color=ORANGE, font_size=30, font=fonts[0])
+
         box = Rectangle(
-            height=text.height + 0.5, width=text.width + 0.5,
-            fill_opacity=0.5, stroke_color=self.DODGER_BLUE
+            color=self.BACKGROUND_COLOR, height=text.height + 0.5, width=text.width + 0.5,
+            stroke_color=ORANGE
         )
         text = text.move_to(box.get_center())
         result.add(box, text)
@@ -246,10 +254,14 @@ class ProverVerifierHashCheck(Scene):
 
     def get_boxed_text(self, text_content, text_color, box_colour, font_size):
         result = VGroup()
-        text = Text(text_content, color=text_color, font_size=font_size)
+
+        with RegisterFont("Roboto") as fonts:
+            text = Text(text_content, color=text_color, font_size=font_size, font=fonts[0])
+
         box = Rectangle(
+            color=self.BOX_BACKGROUND,
             height=text.height + 0.5, width=text.width + 0.5,
-            fill_opacity=0.5, stroke_color=box_colour
+            stroke_color=box_colour
         )
         text = text.move_to(box.get_center())
         result.add(box, text)
@@ -296,7 +308,7 @@ class ProverVerifierHashCheck(Scene):
         ])
 
         center = verification_algo_text.get_center()[1] + verification_algo_text.height / 2
-        lambda_arrow = Arrow(start=[0, center + 1.5, 0], end=[0, center, 0], color=BLACK)
+        lambda_arrow = Arrow(start=[0, center + 1.5, 0], end=[0, center, 0], color=WHITE)
 
         self.play(Create(step_3_text))
 
@@ -311,8 +323,8 @@ class ProverVerifierHashCheck(Scene):
                               verification_algo_text.get_center()[1] - 0.5 * verification_algo_text.height, 0]
         bottom_arrow_1_end = [bottom_arrow_begin[0], bottom_arrow_begin[1] - 1.5, 0]
 
-        bottom_arrow = Arrow(start=bottom_arrow_begin, end=bottom_arrow_1_end, color=BLACK)
-        verification_op_text = self.get_boxed_text("True / False", BLACK, BLACK, 18)
+        bottom_arrow = Arrow(start=bottom_arrow_begin, end=bottom_arrow_1_end, color=WHITE)
+        verification_op_text = self.get_boxed_text("True / False", WHITE, WHITE, 18)
         verification_op_text.move_to(bottom_arrow, DOWN).shift(0.8 * DOWN)
 
         self.play(Create(bottom_arrow), Write(verification_op_text))
@@ -328,25 +340,25 @@ class ProverVerifierHashCheck(Scene):
 
     def intro(self):
         result = VGroup()
-        understanding_zkp = Text("Understanding Zero Knowledge Proofs", font_size=50, color=self.DODGER_BLUE)
+
+        with RegisterFont("Itim") as fonts:
+            understanding_zkp = Text("Understanding Zero Knowledge Proofs", font_size=50, color=WHITE, font=fonts[0])
+
         box = Rectangle(
+            color=self.BOX_BACKGROUND,
             height=understanding_zkp.height + 0.5, width=understanding_zkp.width + 0.5,
-            fill_opacity=0.5, stroke_color=self.DODGER_BLUE
-        )
-        box2 = Rectangle(
-            height=understanding_zkp.height + 1, width=understanding_zkp.width + 1,
-            fill_opacity=0.5, stroke_color=self.DODGER_BLUE
+            stroke_color=ORANGE
         )
         understanding_zkp = understanding_zkp.move_to(box.get_center())
-        result.add(box, box2, understanding_zkp)
+        result.add(box, understanding_zkp)
 
-        self.play(Create(box), Create(box2), Write(understanding_zkp))
+        self.play(Create(box), Write(understanding_zkp))
         self.wait(2)
-        self.exit_elements([understanding_zkp, box, box2])
+        self.exit_elements([understanding_zkp, box])
 
     def outro(self):
-        chat_bubble = ImageMobject("assets/dialogue/8.png")
-        chat_bubble.move_to([1.8, 2.2, 0])
+        chat_bubble = ImageMobject("assets/revised/dialogue/6.png")
+        chat_bubble.move_to([2, 2, 0])
         self.play(FadeIn(chat_bubble))
         self.wait(4)
 
@@ -355,27 +367,43 @@ class ProverVerifierHashCheck(Scene):
     def construct(self):
         DODGER_BLUE = "#1E90FF"
         play_args = {"run_time": 4}
-        self.camera.background_color = WHITE
+        self.camera.background_color = self.BACKGROUND_COLOR
 
-        prover_character = ImageMobject("assets/peggy.png")
-        prover_character.height = 5
-        prover_character.width = 3
+        prover_character = ImageMobject("assets/revised/Peggy.png")
+        prover_character.height = 4
+        prover_character.width = 12.0/5
 
-        verifier_character = ImageMobject("assets/victor.png")
-        verifier_character.height = 5
-        verifier_character.width = 3
+        with RegisterFont("Roboto") as fonts:
+            peggy_text = Text("Peggy", font_size=20, color=WHITE, font=fonts[0], weight=BOLD)
+            prover_text = Text("(Prover)", font_size=20, color=WHITE, font=fonts[0])
 
-        prover_character.move_to([-5, -1.3, 0])
+        prover_text_group = VGroup(peggy_text, prover_text).arrange(DOWN, buff=SMALL_BUFF)
+        prover_text_group.move_to([-5.2, -3.2, 0])
+
+        verifier_character = ImageMobject("assets/revised/Victor.png")
+        verifier_character.height = 4
+        verifier_character.width = 12.0/5
+
+        with RegisterFont("Roboto") as fonts:
+            victor_text = Text("Victor", font_size=20, color=WHITE, font=fonts[0], weight=BOLD)
+            verifier_text = Text("(Verifier)", font_size=20, color=WHITE, font=fonts[0])
+
+        verifier_text_group = VGroup(victor_text, verifier_text).arrange(DOWN, buff=SMALL_BUFF)
+        verifier_text_group.move_to([5, -3.1, 0])
+
+        prover_character.move_to([-5, -0.8, 0])
 
         retained_objects = SimpleNamespace()
 
         self.intro()
 
         self.add(prover_character)
+        self.add(prover_text_group)
 
-        verifier_character.move_to([5, -1.3, 0])
+        verifier_character.move_to([5, -0.8, 0])
 
         self.add(verifier_character)
+        self.add(verifier_text_group)
 
         self.scene_1(retained_objects)
 
