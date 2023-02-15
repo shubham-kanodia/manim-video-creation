@@ -16,54 +16,61 @@ class ProverVerifierHashCheck(Scene):
         self.play(*[FadeOut(element) for element in elements])
 
     def scene_1(self, retained_objects):
+        secret_value_box = self.get_boxed_text("Secret Value (w)", WHITE, WHITE, 18)
+
+        secret_value_box_x = retained_objects.prover_character.get_center()[0]
+        secret_value_box.move_to([secret_value_box_x + 0.5, 1.5, 0])
+
+        self.play(Create(secret_value_box))
+
         chat_bubble = ImageMobject("assets/revised/dialogue/1.png")
-        chat_bubble.move_to([-2, 2, 0])
+        chat_bubble.move_to([-0.8, 2, 0])
         self.play(FadeIn(chat_bubble))
-        self.wait(2)
+        self.wait(2.4)
 
         self.play(FadeOut(chat_bubble))
 
         chat_bubble = ImageMobject("assets/revised/dialogue/2.png")
         chat_bubble.move_to([2, 2, 0])
         self.play(FadeIn(chat_bubble))
-        self.wait(2)
+        self.wait(1.9)
 
         self.play(FadeOut(chat_bubble))
 
         chat_bubble = ImageMobject("assets/revised/dialogue/3.png")
-        chat_bubble.move_to([-2, 2, 0])
+        chat_bubble.move_to([-0.8, 2, 0])
         self.play(FadeIn(chat_bubble))
-        self.wait(2)
+        self.wait(1.9)
 
         self.play(FadeOut(chat_bubble))
 
         chat_bubble = ImageMobject("assets/revised/dialogue/4.png")
         chat_bubble.move_to([2, 2, 0])
         self.play(FadeIn(chat_bubble))
-        self.wait(2)
+        self.wait(1.9)
 
         self.play(FadeOut(chat_bubble))
 
         chat_bubble = ImageMobject("assets/revised/dialogue/5.png")
-        chat_bubble.move_to([-2, 2, 0])
+        chat_bubble.move_to([-0.8, 2, 0])
         self.play(FadeIn(chat_bubble))
-        self.wait(2)
+        self.wait(1.9)
 
         self.play(FadeOut(chat_bubble))
 
         # hashed_value_box = self.get_boxed_text("Hashed Value (x)", WHITE, WHITE, 18)
-        secret_value_box = self.get_boxed_text("Secret Value (w)", WHITE, WHITE, 18)
+        # secret_value_box = self.get_boxed_text("Secret Value (w)", WHITE, WHITE, 18)
 
         # Secret value final position - [-5.5, 1.5, 0]
         # hashed_value_box.move_to([-5.5, 1.5, 0])
-        secret_value_box_x = retained_objects.prover_character.get_center()[0]
-        secret_value_box.move_to([secret_value_box_x + 0.5, 1.5, 0])
+        # secret_value_box_x = retained_objects.prover_character.get_center()[0]
+        # secret_value_box.move_to([secret_value_box_x + 0.5, 1.5, 0])
 
         # hashed_value_box_verifier = self.get_boxed_text("Hashed Value (x)", WHITE, WHITE, 18)
         # hashed_value_box_verifier.move_to([4.5, 1.5, 0])
 
-        self.play(Create(secret_value_box))
-        self.wait(1)
+        # self.play(Create(secret_value_box))
+        # self.wait(1)
 
         # retained_objects.hashed_value_box = hashed_value_box
         retained_objects.secret_value_box = secret_value_box
@@ -116,7 +123,14 @@ class ProverVerifierHashCheck(Scene):
         lambda_arrow = Arrow(start=[0, center + 1.5, 0], end=[0, center, 0], color=WHITE)
         lambda_group = lambda_group.move_to(lambda_arrow, UP).shift(1.6 * UP)
         step_1_text.shift(0.2 * UP)
-        self.play(FadeIn(trusted_setup_text), FadeIn(lambda_group), FadeIn(lambda_arrow))
+        self.play(FadeIn(step_1_text), FadeIn(trusted_setup_text))
+        self.wait(4)
+
+        self.play(FadeIn(lambda_text))
+        self.wait(4)
+
+        self.play(FadeIn(lambda_arrow))
+        self.wait(2)
 
         bottom_arrows_begin = [trusted_setup_text.get_center()[0],
                                trusted_setup_text.get_center()[1] - 0.65 * trusted_setup_text.height, 0]
@@ -143,7 +157,7 @@ class ProverVerifierHashCheck(Scene):
         )
 
         self.play(Create(prover_key_text), Create(verifier_key_text))
-        self.wait(2)
+        self.wait(5)
 
         line_begin = [bottom_arrow_1_end[0],
                       bottom_arrow_1_end[1] - 0.5,
@@ -162,7 +176,7 @@ class ProverVerifierHashCheck(Scene):
             FadeOut(trusted_setup_text), FadeOut(setup_bottom_arrow_1), FadeOut(setup_bottom_arrow_2),
             FadeOut(lambda_group), FadeOut(lambda_arrow),
             MoveAlongPath(prover_key_text, l1), MoveAlongPath(verifier_key_text, l2), rate_func=linear)
-        self.wait(2)
+        self.wait(2.5)
 
         retained_objects.prover_key_text = prover_key_text
         retained_objects.verifier_key_text = verifier_key_text
@@ -207,15 +221,18 @@ class ProverVerifierHashCheck(Scene):
              hash_function_text.get_center()[1] - (hash_function_text.height / 2.0) - 1.4 - 0.2,
              0]
         )
+        self.wait(1)
 
         self.play(MoveAlongPath(secret_value_box_2, l1))
         self.play(FadeIn(arrow),
-                  FadeIn(hash_function_text),
-                  FadeIn(second_arrow),
+                  FadeIn(hash_function_text))
+        self.wait(4)
+
+        self.play(FadeIn(second_arrow),
                   FadeIn(hashed_value_box)
                   )
 
-        self.wait(2)
+        self.wait(4)
 
         hashed_value_box_2 = self.get_boxed_text("Hashed Value (x)", WHITE, WHITE, 18)
         hashed_value_box_2.move_to(
@@ -261,7 +278,7 @@ class ProverVerifierHashCheck(Scene):
 
         retained_objects.hashed_value_box = hashed_value_box_2
         retained_objects.hashed_value_box_verifier = hashed_value_box
-        self.wait(2)
+        self.wait(6)
 
     def scene_3(self, retained_objects):
         proving_algo_text = self.proving_algo_text()
@@ -292,16 +309,19 @@ class ProverVerifierHashCheck(Scene):
             0
         ])
         self.play(Create(step_2_text))
+        self.wait(3)
 
         self.play(
             MoveAlongPath(retained_objects.prover_key_text, l1),
             MoveAlongPath(retained_objects.hashed_value_box, l2),
             MoveAlongPath(retained_objects.secret_value_box, l3)
         )
+        self.wait(7)
 
         center = proving_algo_text.get_center()[1] + proving_algo_text.height / 2
         lambda_arrow = Arrow(start=[0, center + 1.5, 0], end=[0, center, 0], color=WHITE)
         self.play(Create(proving_algo_text), Create(lambda_arrow))
+        self.wait(1)
 
         bottom_arrow_begin = [proving_algo_text.get_center()[0],
                               proving_algo_text.get_center()[1] - 0.5 * proving_algo_text.height, 0]
@@ -313,7 +333,7 @@ class ProverVerifierHashCheck(Scene):
         proof_text.move_to(bottom_arrow, DOWN).shift(0.8 * DOWN)
 
         self.play(Create(bottom_arrow), Create(proof_text))
-        self.wait(2)
+        self.wait(1)
 
         proof_transfer_arrow = Arrow(
             start=[-3, -1, 0], end=[3, -1, 0], color=WHITE
@@ -437,12 +457,16 @@ class ProverVerifierHashCheck(Scene):
 
         self.play(Create(step_3_text))
 
-        self.play(
-            Create(verification_algo_text), Create(lambda_arrow),
-            MoveAlongPath(retained_objects.hashed_value_box_verifier, l1),
+        self.play(MoveAlongPath(retained_objects.hashed_value_box_verifier, l1),
             MoveAlongPath(retained_objects.verifier_key_text, l2),
-            MoveAlongPath(retained_objects.proof_text, l3)
+            MoveAlongPath(retained_objects.proof_text, l3))
+
+        self.wait(3.5)
+
+        self.play(
+            Create(verification_algo_text), Create(lambda_arrow)
         )
+        self.wait(1.5)
 
         bottom_arrow_begin = [verification_algo_text.get_center()[0],
                               verification_algo_text.get_center()[1] - 0.5 * verification_algo_text.height, 0]
@@ -453,7 +477,7 @@ class ProverVerifierHashCheck(Scene):
         verification_op_text.move_to(bottom_arrow, DOWN).shift(0.8 * DOWN)
 
         self.play(Create(bottom_arrow), Write(verification_op_text))
-        self.wait(2)
+        self.wait(15)
 
         self.play(FadeOut(step_3_text),
                   FadeOut(retained_objects.proof_text),
